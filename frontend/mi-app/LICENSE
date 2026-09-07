@@ -1,0 +1,27 @@
+Licencia de Uso Limitado y Términos de Servicio
+Copyright (c) 2026 [Tu Nombre o Nombre de Tu Empresa]. Todos los derechos reservados.
+
+1. Concesión de Uso
+Se concede autorización a cualquier persona para acceder, visualizar e interactuar con el Software únicamente a través del dominio web oficial: [https://tusitiooficial.com](https://tusitiooficial.com) (en adelante, el "Sitio Oficial").
+
+2. Restricciones Explícitas
+Queda estrictamente prohibido a cualquier persona o entidad, sin la autorización previa y por escrito del titular del copyright:
+
+a) Copiar, duplicar, descargar, extraer (scrape), modificar, adaptar o crear obras derivadas de cualquier parte del código fuente, código objeto, interfaces de usuario o arquitectura del Software.
+
+b) Redistribuir, revender, alquilar, sublicenciar, alojar o ejecutar el Software en servidores, dominios o plataformas ajenas al Sitio Oficial.
+
+c) Descompilar, realizar ingeniería inversa, desmontar o intentar descubrir el código fuente subyacente del Software.
+
+d) Facilitar el acceso al Software a través de incrustaciones (iFrames), marcos externos o cualquier método de visualización fuera del Sitio Oficial.
+
+3. Propiedad Intelectual
+Todos los derechos de propiedad intelectual, marcas registradas, derechos de autor y secretos comerciales asociados con el Software pertenecen exclusivamente a [Tu Nombre o Nombre de Tu Empresa]. Esta licencia no otorga ningún derecho de propiedad sobre el Software, sino únicamente un derecho de acceso condicionado al cumplimiento de estos términos.
+
+4. Exclusión de Garantía y Limitación de Responsabilidad
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITÁNDOSE A LAS GARANTÍAS DE COMERCIABILIDAD, IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS AUTORES O TITULARES DEL COPYRIGHT SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑO U OTRA RESPONSABILIDAD, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O DE OTRO TIPO, QUE SURJA DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTROS TRATOS EN EL SOFTWARE.
+
+Notas para la implementación:
+Reemplaza [Tu Nombre o Nombre de Tu Empresa] y [https://tusitiooficial.com](https://tusitiooficial.com) con tus datos reales.
+
+Si el software incluye código de terceros o librerías MIT (como Expo, React, etc.), esta licencia aplicará únicamente a tu código original. Las librerías de código abierto de terceros conservan sus propias licencias.

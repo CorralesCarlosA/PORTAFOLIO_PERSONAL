@@ -1,0 +1,28 @@
+
+frontend/miapp/node_modules
+
+
+# Python
+
+backend/_pycache_
+backend/env
+
+*.pyc
+*.pyo
+
+# React Native / Node
+node_modules/
+.expo/
+.idea/
+.vscode/
+frontend/mi-app/.claude
+frontend/mi-app/dev
+frontend/mi-app/.expo
+frontend/mi-app/node-modules
+frontend/mi-app/CLAUDE.md
+frontend/mi-app/paka
+
+# Variables de entorno secretas (si las usas)
+
+
+
