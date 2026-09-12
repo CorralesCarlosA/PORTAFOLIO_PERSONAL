@@ -4,15 +4,19 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 export default function ProjectCard({ project, onSelect, onVote }) {
   if (!project) return null;
 
+  const previewImage = project.image_url && project.image_url.trim().length > 0
+    ? project.image_url
+    : project.media && project.media.length > 0 && project.media[0].file_path.startsWith('http')
+      ? project.media[0].file_path
+      : project.media && project.media.length > 0
+        ? `${process.env.API_URL || 'http://127.0.0.1:8000'}${project.media[0].file_path}`
+        : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+
   return (
     <View style={styles.projectCard}>
       <View style={styles.cardImageContainer}>
         <Image
-          source={{
-            uri: project.media && project.media.length > 0 && project.media[0].file_path.startsWith('http')
-              ? project.media[0].file_path
-              : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
-          }}
+          source={{ uri: previewImage }}
           style={styles.cardImage}
           resizeMode="cover"
         />

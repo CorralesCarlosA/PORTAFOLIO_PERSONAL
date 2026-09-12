@@ -60,6 +60,7 @@ export default function App() {
   const [newDesc, setNewDesc] = useState('');
   const [newRepo, setNewRepo] = useState('');
   const [newDoc, setNewDoc] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
   const [newCatId, setNewCatId] = useState(1);
 
   // Formulario Nueva Idea de Desarrollo (Admin)
@@ -67,6 +68,7 @@ export default function App() {
   const [newIdeaDesc, setNewIdeaDesc] = useState('');
   const [newIdeaDoc, setNewIdeaDoc] = useState('');
   const [newIdeaRepo, setNewIdeaRepo] = useState('');
+  const [newIdeaImageUrl, setNewIdeaImageUrl] = useState('');
   const [newIdeaCatId, setNewIdeaCatId] = useState(1);
 
   // Estado Edición de Proyecto / Idea Existente
@@ -75,6 +77,7 @@ export default function App() {
   const [editItemDesc, setEditItemDesc] = useState('');
   const [editItemRepo, setEditItemRepo] = useState('');
   const [editItemDoc, setEditItemDoc] = useState('');
+  const [editItemImageUrl, setEditItemImageUrl] = useState('');
   const [editItemCatId, setEditItemCatId] = useState(1);
   const [editItemIsIdea, setEditItemIsIdea] = useState(false);
 
@@ -91,7 +94,7 @@ export default function App() {
         const stored = localStorage.getItem('portfolio_voted_items');
         return stored ? JSON.parse(stored) : [];
       }
-    } catch (_) {}
+    } catch (_) { }
     return [];
   });
 
@@ -230,7 +233,7 @@ export default function App() {
           if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
             localStorage.setItem('portfolio_voted_items', JSON.stringify(newVoted));
           }
-        } catch (_) {}
+        } catch (_) { }
         showToast("Valoración registrada. ¡Gracias por tu apoyo!");
       }
     } catch (e) {
@@ -391,6 +394,7 @@ export default function App() {
       formData.append('description', newDesc);
       formData.append('repository_url', newRepo || 'https://github.com/');
       formData.append('problem_document', newDoc);
+      formData.append('image_url', newImageUrl || '');
       formData.append('category_id', newCatId);
       formData.append('is_active', 'true');
       formData.append('is_idea', 'false');
@@ -401,7 +405,7 @@ export default function App() {
         body: formData
       });
       if (res.ok) {
-        setNewTitle(''); setNewDesc(''); setNewRepo(''); setNewDoc('');
+        setNewTitle(''); setNewDesc(''); setNewRepo(''); setNewDoc(''); setNewImageUrl('');
         fetchProjects();
         fetchAdminProjects();
         showToast("Proyecto registrado exitosamente");
@@ -423,6 +427,7 @@ export default function App() {
       formData.append('description', newIdeaDesc);
       formData.append('repository_url', newIdeaRepo || '');
       formData.append('problem_document', newIdeaDoc);
+      formData.append('image_url', newIdeaImageUrl || '');
       formData.append('category_id', newIdeaCatId);
       formData.append('is_active', 'true');
       formData.append('is_idea', 'true');
@@ -433,7 +438,7 @@ export default function App() {
         body: formData
       });
       if (res.ok) {
-        setNewIdeaTitle(''); setNewIdeaDesc(''); setNewIdeaRepo(''); setNewIdeaDoc('');
+        setNewIdeaTitle(''); setNewIdeaDesc(''); setNewIdeaRepo(''); setNewIdeaDoc(''); setNewIdeaImageUrl('');
         fetchIdeas();
         fetchAdminProjects();
         showToast("Idea de desarrollo agregada al laboratorio");
@@ -450,6 +455,7 @@ export default function App() {
     setEditItemDesc(item.description || '');
     setEditItemRepo(item.repository_url || '');
     setEditItemDoc(item.problem_document || '');
+    setEditItemImageUrl(item.image_url || '');
     setEditItemCatId(item.category_id || 1);
     setEditItemIsIdea(item.is_idea || false);
   };
@@ -463,6 +469,7 @@ export default function App() {
       formData.append('description', editItemDesc);
       formData.append('repository_url', editItemRepo);
       formData.append('problem_document', editItemDoc);
+      formData.append('image_url', editItemImageUrl || '');
       formData.append('category_id', editItemCatId);
       formData.append('is_active', editingItem.is_active ? 'true' : 'false');
       formData.append('is_idea', editItemIsIdea ? 'true' : 'false');
@@ -939,11 +946,13 @@ export default function App() {
                   <View style={styles.cardCoverContainer}>
                     <Image
                       source={{
-                        uri: project.media && project.media.length > 0 && project.media[0].file_path.startsWith('http')
-                          ? project.media[0].file_path
-                          : project.media && project.media.length > 0
-                            ? `${API_URL}${project.media[0].file_path}`
-                            : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+                        uri: project.image_url && project.image_url.trim().length > 0
+                          ? project.image_url
+                          : project.media && project.media.length > 0 && project.media[0].file_path.startsWith('http')
+                            ? project.media[0].file_path
+                            : project.media && project.media.length > 0
+                              ? `${API_URL}${project.media[0].file_path}`
+                              : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
                       }}
                       style={styles.cardCoverImage}
                       resizeMode="cover"
@@ -1031,12 +1040,14 @@ export default function App() {
 
                 <Text style={styles.modalItemTitle}>{selectedItem.title}</Text>
 
-                {selectedItem.media && selectedItem.media.length > 0 ? (
+                {(selectedItem.image_url || selectedItem.media?.[0]?.file_path) ? (
                   <Image
                     source={{
-                      uri: selectedItem.media[0].file_path.startsWith('http')
-                        ? selectedItem.media[0].file_path
-                        : `${API_URL}${selectedItem.media[0].file_path}`
+                      uri: selectedItem.image_url && selectedItem.image_url.trim().length > 0
+                        ? selectedItem.image_url
+                        : selectedItem.media && selectedItem.media.length > 0 && selectedItem.media[0].file_path.startsWith('http')
+                          ? selectedItem.media[0].file_path
+                          : `${API_URL}${selectedItem.media?.[0]?.file_path || ''}`
                     }}
                     style={styles.modalBannerImg}
                     resizeMode="cover"
@@ -1254,6 +1265,7 @@ export default function App() {
                             <TextInput placeholder="Título del Proyecto" placeholderTextColor="#64748b" value={editItemTitle} onChangeText={setEditItemTitle} style={styles.formInput} />
                             <TextInput placeholder="Descripción del Proyecto" placeholderTextColor="#64748b" value={editItemDesc} onChangeText={setEditItemDesc} multiline style={[styles.formInput, { height: 70 }]} />
                             <TextInput placeholder="URL Repositorio (GitHub)" placeholderTextColor="#64748b" value={editItemRepo} onChangeText={setEditItemRepo} style={styles.formInput} />
+                            <TextInput placeholder="URL de la imagen del proyecto" placeholderTextColor="#64748b" value={editItemImageUrl} onChangeText={setEditItemImageUrl} style={styles.formInput} />
                             <TextInput placeholder="Análisis del Problema & Solución Técnica" placeholderTextColor="#64748b" value={editItemDoc} onChangeText={setEditItemDoc} multiline style={[styles.formInput, { height: 70 }]} />
 
                             <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
@@ -1271,6 +1283,7 @@ export default function App() {
                             <TextInput placeholder="Título del Proyecto" placeholderTextColor="#64748b" value={newTitle} onChangeText={setNewTitle} style={styles.formInput} />
                             <TextInput placeholder="Descripción" placeholderTextColor="#64748b" value={newDesc} onChangeText={setNewDesc} multiline style={[styles.formInput, { height: 60 }]} />
                             <TextInput placeholder="URL Repositorio (GitHub)" placeholderTextColor="#64748b" value={newRepo} onChangeText={setNewRepo} style={styles.formInput} />
+                            <TextInput placeholder="URL de la imagen del proyecto" placeholderTextColor="#64748b" value={newImageUrl} onChangeText={setNewImageUrl} style={styles.formInput} />
                             <TextInput placeholder="Análisis del Problema & Solución Técnica" placeholderTextColor="#64748b" value={newDoc} onChangeText={setNewDoc} multiline style={[styles.formInput, { height: 60 }]} />
 
                             <Text style={{ color: '#cbd5e1', marginBottom: 6 }}>Categoría:</Text>
@@ -1329,6 +1342,8 @@ export default function App() {
                             <Text style={styles.adminFormHeading}>Editar Idea de Desarrollo</Text>
                             <TextInput placeholder="Título de la Idea" placeholderTextColor="#64748b" value={editItemTitle} onChangeText={setEditItemTitle} style={styles.formInput} />
                             <TextInput placeholder="Descripción de la Idea" placeholderTextColor="#64748b" value={editItemDesc} onChangeText={setEditItemDesc} multiline style={[styles.formInput, { height: 70 }]} />
+                            <TextInput placeholder="URL Repositorio o Roadmap" placeholderTextColor="#64748b" value={editItemRepo} onChangeText={setEditItemRepo} style={styles.formInput} />
+                            <TextInput placeholder="URL de la imagen de la idea" placeholderTextColor="#64748b" value={editItemImageUrl} onChangeText={setEditItemImageUrl} style={styles.formInput} />
                             <TextInput placeholder="Visión Técnica y Problema a Resolver" placeholderTextColor="#64748b" value={editItemDoc} onChangeText={setEditItemDoc} multiline style={[styles.formInput, { height: 70 }]} />
 
                             <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
@@ -1347,6 +1362,7 @@ export default function App() {
                             <TextInput placeholder="Descripción detallada de la propuesta" placeholderTextColor="#64748b" value={newIdeaDesc} onChangeText={setNewIdeaDesc} multiline style={[styles.formInput, { height: 60 }]} />
                             <TextInput placeholder="Visión técnica, justificación o problema que resuelve" placeholderTextColor="#64748b" value={newIdeaDoc} onChangeText={setNewIdeaDoc} multiline style={[styles.formInput, { height: 60 }]} />
                             <TextInput placeholder="URL Repositorio o Roadmap (Opcional)" placeholderTextColor="#64748b" value={newIdeaRepo} onChangeText={setNewIdeaRepo} style={styles.formInput} />
+                            <TextInput placeholder="URL de la imagen de la idea" placeholderTextColor="#64748b" value={newIdeaImageUrl} onChangeText={setNewIdeaImageUrl} style={styles.formInput} />
 
                             <TouchableOpacity style={styles.saveFormBtn} onPress={handleCreateIdea}>
                               <Text style={styles.saveFormBtnText}>Guardar Idea en el Laboratorio</Text>
