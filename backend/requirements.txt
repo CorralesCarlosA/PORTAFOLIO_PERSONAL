@@ -6,3 +6,4 @@ psutil==7.2.2
 virtualenv==20.36.1
 fastapi
 uvicorn
+sqlalchemy
