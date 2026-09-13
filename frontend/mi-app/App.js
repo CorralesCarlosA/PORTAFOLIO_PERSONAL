@@ -13,7 +13,22 @@ import {
   Platform
 } from 'react-native';
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://backend-portafolio-41qp.onrender.com';
+
+const fetchWithTimeout = async (url, options = {}, timeoutMs = 40000) => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+};
 
 export default function App() {
   // Estado del Perfil
@@ -111,31 +126,33 @@ export default function App() {
 
   const loadData = async () => {
     setLoading(true);
-    await Promise.all([fetchProfile(), fetchProjects(), fetchIdeas(), fetchCategories()]);
+    await Promise.allSettled([
+      fetchProfile(),
+      fetchProjects(),
+      fetchIdeas(),
+      fetchCategories(),
+    ]);
     setLoading(false);
   };
 
   const fetchProfile = async () => {
     try {
-      const res = await fetch(`${API_URL}/profile`);
-      if (res.ok) {
-        const data = await res.json();
-        setProfile(data);
-        setEditFullName(data.full_name || '');
-        setEditHeadline(data.headline || '');
-        setEditBio(data.bio || '');
-        setEditIsAvailable(data.is_available ?? true);
-        setEditEmail(data.email || '');
-        setEditPhone(data.phone || '');
-        setEditLinkedin(data.linkedin_url || '');
-        setEditGithub(data.github_url || '');
-        setEditLocation(data.location || '');
-        setEditCareerStartYear((data.career_start_year || 2021).toString());
-        setEditExperienceYears((data.experience_years || 5).toString());
-        setEditSkills(data.skills || '');
-        setEditAvatarUrl(data.avatar_url || '');
-        setAvatarPreview(data.avatar_url || '');
-      }
+      const data = await fetchWithTimeout(`${API_URL}/profile`);
+      setProfile(data);
+      setEditFullName(data.full_name || '');
+      setEditHeadline(data.headline || '');
+      setEditBio(data.bio || '');
+      setEditIsAvailable(data.is_available ?? true);
+      setEditEmail(data.email || '');
+      setEditPhone(data.phone || '');
+      setEditLinkedin(data.linkedin_url || '');
+      setEditGithub(data.github_url || '');
+      setEditLocation(data.location || '');
+      setEditCareerStartYear((data.career_start_year || 2021).toString());
+      setEditExperienceYears((data.experience_years || 5).toString());
+      setEditSkills(data.skills || '');
+      setEditAvatarUrl(data.avatar_url || '');
+      setAvatarPreview(data.avatar_url || '');
     } catch (e) {
       console.error("Error al cargar perfil desde BD:", e);
     }
@@ -143,11 +160,8 @@ export default function App() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch(`${API_URL}/projects`);
-      if (res.ok) {
-        const data = await res.json();
-        setProjects(data);
-      }
+      const data = await fetchWithTimeout(`${API_URL}/projects`);
+      setProjects(data);
     } catch (e) {
       console.error("Error al cargar proyectos:", e);
     }
@@ -155,11 +169,8 @@ export default function App() {
 
   const fetchIdeas = async () => {
     try {
-      const res = await fetch(`${API_URL}/ideas`);
-      if (res.ok) {
-        const data = await res.json();
-        setIdeas(data);
-      }
+      const data = await fetchWithTimeout(`${API_URL}/ideas`);
+      setIdeas(data);
     } catch (e) {
       console.error("Error al cargar ideas:", e);
     }
@@ -182,14 +193,11 @@ export default function App() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch(`${API_URL}/categories`);
-      if (res.ok) {
-        const data = await res.json();
-        setCategories(data);
-        if (data.length > 0) {
-          setNewCatId(data[0].id);
-          setNewIdeaCatId(data[0].id);
-        }
+      const data = await fetchWithTimeout(`${API_URL}/categories`);
+      setCategories(data);
+      if (data.length > 0) {
+        setNewCatId(data[0].id);
+        setNewIdeaCatId(data[0].id);
       }
     } catch (e) {
       console.error("Error al cargar categorías:", e);
@@ -597,6 +605,21 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {loading ? (
+        <View style={styles.backendLoaderOverlay}>
+          <View style={styles.backendLoaderCard}>
+            <ActivityIndicator size="large" color="#8b5cf6" />
+            <Text style={styles.backendLoaderTitle}>Cargando portfolio</Text>
+            <Text style={styles.backendLoaderSubtitle}>
+              El backend está alojado en Render y puede tardar hasta 40 segundos en responder.
+            </Text>
+            <View style={styles.backendLoaderProgressTrack}>
+              <View style={styles.backendLoaderProgressFill} />
+            </View>
+          </View>
+        </View>
+      ) : null}
+
       {/* NOTIFICACIÓN TOAST LIMPIA */}
       {toastMessage ? (
         <View style={styles.toast}>
@@ -1008,6 +1031,12 @@ export default function App() {
           }}
           activeOpacity={0.4}
         />
+
+        <View style={styles.backendNoticeBar}>
+          <Text style={styles.backendNoticeText}>
+            Este portfolio puede actualizarse con nuevos proyectos, a la siguiente puede que encuentres cosas nuevas
+          </Text>
+        </View>
 
       </ScrollView>
 
@@ -1587,6 +1616,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     zIndex: 99999,
+
   },
   toastText: {
     color: '#38bdf8',
@@ -2120,6 +2150,79 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+
+  backendNoticeBar: {
+    marginTop: 28,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: '#111827',
+    borderWidth: 1,
+    borderColor: '#334155',
+    alignSelf: 'center',
+    maxWidth: 760,
+    width: '100%',
+  },
+  backendNoticeText: {
+    color: '#cbd5e1',
+    fontSize: 11,
+    fontWeight: '500',
+    lineHeight: 18,
+    textAlign: 'center',
+  },
+
+  backendLoaderOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 20,
+    backgroundColor: 'rgba(15, 23, 42, 0.96)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  backendLoaderCard: {
+    width: '92%',
+    maxWidth: 440,
+    paddingVertical: 30,
+    paddingHorizontal: 24,
+    borderRadius: 18,
+    backgroundColor: '#111827',
+    borderWidth: 1,
+    borderColor: '#334155',
+    alignItems: 'center',
+  },
+  backendLoaderTitle: {
+    color: '#e2e8f0',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 14,
+    textAlign: 'center',
+  },
+  backendLoaderSubtitle: {
+    color: '#94a3b8',
+    fontSize: 13,
+    lineHeight: 20,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  backendLoaderProgressTrack: {
+    height: 6,
+    width: '100%',
+    borderRadius: 3,
+    backgroundColor: '#334155',
+    marginTop: 16,
+    overflow: 'hidden',
+  },
+  backendLoaderProgressFill: {
+    height: '100%',
+    width: '65%',
+    borderRadius: 3,
+    backgroundColor: '#8b5cf6',
   },
 
   // =========================================================================

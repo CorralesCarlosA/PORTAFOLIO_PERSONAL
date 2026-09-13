@@ -18,7 +18,8 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "https://github.com/CorralesCarlosA.png",
+      "baseUrl": "/PORTAFOLIO_PERSONAL"
     }
   }
 }
