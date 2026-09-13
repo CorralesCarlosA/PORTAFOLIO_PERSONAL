@@ -20,6 +20,9 @@
     "web": {
       "favicon": "https://github.com/CorralesCarlosA.png",
       "baseUrl": "/PORTAFOLIO_PERSONAL"
+    },
+    "experiments": {
+      "baseUrl": "/PORTAFOLIO_PERSONAL"
     }
   }
 }
