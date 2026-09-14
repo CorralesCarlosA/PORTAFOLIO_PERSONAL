@@ -25,6 +25,6 @@ pruebas.py
 
 
 # Variables de entorno secretas (si las usas)
-
-
-
+.env
+.env.*
+!.env.example

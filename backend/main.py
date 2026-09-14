@@ -21,7 +21,7 @@ import os
 import shutil
 
 DATABASE_URL = "sqlite:///./portfolio.db"
-SECRET_KEY = "Berbeny.12"
+SECRET_KEY = os.getenv("SECRET_KEY") or "development-only-secret-change-me"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 600
 
