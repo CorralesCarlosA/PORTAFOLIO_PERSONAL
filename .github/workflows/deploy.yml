@@ -5,14 +5,16 @@ on:
     branches: [ main ]
 
 jobs:
+  # ETAPA 1: Compilación de React Native Web
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      # Node.js 24 va al inicio, antes de instalar dependencias
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install Dependencies
         run: |
@@ -29,6 +31,7 @@ jobs:
         with:
           path: ./frontend/mi-app/dist
 
+  # ETAPA 2: Publicación en el servidor de GitHub
   deploy-site:
     needs: deploy
     permissions:
@@ -41,6 +44,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
+        uses: actions/deploy-pages@v4
