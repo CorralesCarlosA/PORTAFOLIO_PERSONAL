@@ -19,10 +19,10 @@
     },
     "web": {
       "favicon": "https://github.com/CorralesCarlosA.png",
-      "baseUrl": "/PORTAFOLIO_PERSONAL"
+      "baseUrl": "/PORTAFOLIO_PERSONAL/frontend/mi-app/"
     },
     "experiments": {
-      "baseUrl": "/PORTAFOLIO_PERSONAL"
+      "baseUrl": "/PORTAFOLIO_PERSONAL/frontend/mi-app/"
     }
   }
 }
