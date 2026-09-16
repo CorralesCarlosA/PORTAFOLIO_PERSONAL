@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://backend-portafolio-41qp.onrender.com';
 
 export default function ProjectCard({ project, onSelect, onVote }) {
   if (!project) return null;
@@ -9,7 +10,7 @@ export default function ProjectCard({ project, onSelect, onVote }) {
     : project.media && project.media.length > 0 && project.media[0].file_path.startsWith('http')
       ? project.media[0].file_path
       : project.media && project.media.length > 0
-        ? `${process.env.API_URL || 'http://127.0.0.1:8000'}${project.media[0].file_path}`
+        ? `${API_URL}${project.media[0].file_path}`
         : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
 
   return (

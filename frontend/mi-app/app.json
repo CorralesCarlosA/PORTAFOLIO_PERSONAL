@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mi-app",
+    "name": "Portafolio Corrales",
     "slug": "mi-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,11 +18,9 @@
       }
     },
     "web": {
+      "name": "Portafolio Corrales",
       "favicon": "https://github.com/CorralesCarlosA.png",
-      "baseUrl": "/PORTAFOLIO_PERSONAL/frontend/mi-app/"
-    },
-    "experiments": {
-      "baseUrl": "/PORTAFOLIO_PERSONAL/frontend/mi-app/"
+      "output": "static"
     }
   }
 }
