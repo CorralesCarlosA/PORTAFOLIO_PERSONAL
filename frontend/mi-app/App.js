@@ -13,7 +13,7 @@ import {
   Platform
 } from 'react-native';
 
-const API_URL = 'https://backend-portafolio-41qp.onrender.com';
+const API_URL = process.env.EXPO_BASE_URL || 'https://backend-portafolio-41qp.onrender.com';
 
 const fetchWithTimeout = async (url, options = {}, timeoutMs = 40000) => {
   const controller = new AbortController();
