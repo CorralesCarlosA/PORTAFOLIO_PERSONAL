@@ -20,7 +20,7 @@
     "web": {
       "name": "Portafolio Corrales",
       "favicon": "https://github.com/CorralesCarlosA.png",
-      "output": "static"
+      "output": "single"
     }
   }
 }

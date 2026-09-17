@@ -18,7 +18,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "predeploy": "npx expo export -p web",
-    "deploy": "gh-pages -d dist --dotfiles"
+    "deploy": "gh-pages -d dist --dotfiles",
+    "build:web": "expo export -p web"
   },
   "private": true,
   "devDependencies": {
